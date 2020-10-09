@@ -5,15 +5,13 @@
 #Instructions: Click to add a new boid to the flock, the boids should try to avoid the mouse!
 
 from boid import Boid
-
 from cs1lib import *
 from random import uniform
-
 from quadtree import Quadtree
 
-WIDTH = 600
+WIDTH = 800
 HEIGHT = 600
-NEIGHBORHOOD_THRESHOLD = 50
+NEIGHBORHOOD_THRESHOLD = 100
 SEPARATION_THRESHOLD = 25
 C, A, S = 0.15, 3, 5
 mouse = [WIDTH/2, HEIGHT/2]
@@ -26,7 +24,7 @@ b = []
 
 def main():
     global clicked
-    set_clear_color(1,1,1)
+    set_clear_color(0,0,0)
     clear()
 
     update_boids()
@@ -44,12 +42,13 @@ def click(mx, my):
     global clicked
     clicked = True
 
+
 def add(x, y):
     b.append(Boid(x, y,))
 
 def draw():
     for boid in b:
-        boid.draw()
+        boid.draw(0, 0, 1, False)
 
 def update_boids():
 

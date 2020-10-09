@@ -88,7 +88,7 @@ class Boid:
         result_vector = [sin(avg_dir), cos(avg_dir)]
         return result_vector
 
-    def cohere(self, flock): #returns an accelleration vector pointing to the centerpoint of a flock around a boid #TODO: move this behavior to the flock class?
+    def cohere(self, flock): #returns an accelleration vector pointing to the centerpoint of a flock around a boid
 
         avg_x = 0
         avg_y = 0
