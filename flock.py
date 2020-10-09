@@ -26,30 +26,33 @@ class Flock:
 
     def update(self, c, a, s, seperation_threshold, obstacle_position = [], obstacle_weight = 1):
 
-        for agent in self.crowd: #Select a boid
+        pass
 
-            neighborhood = Flock(0, self.threshold, self.window_width, self.window_height) #Define an empty subflock
-            acceleration = [0,0]
+        # for agent in self.crowd: #Select a boid
+        #
+        #     neighborhood = Flock(0, self.threshold, self.window_width, self.window_height) #Define an empty subflock
+        #     acceleration = [0,0]
+        #
+        #     for member in self.crowd: #Select a boid
+        #
+        #         if agent.get_boid_distance(member) <= self.threshold  and agent != member and agent.get_boid_angle(member) <= VIEW_ANGLE: #If a boid in close enough, not the agent, and visible to the agent add it to the neighborhood
+        #             neighborhood.add_boid(member)
+        #             #set_fill_color(1, 1, 1, 0.2)
+        #             #draw_circle(agent.pos[0], agent.pos[1], self.threshold)
+        #
+        #     ##Handle the radius of effect of any obstacles
+        #     if 0 < fabs(agent.get_raw_distance(obstacle_position)) < 100:
+        #         obstacle_weight = 10
+        #     else:
+        #         obstacle_weight = 0
+        #     if neighborhood.pop != 0: #This is an efficiency improvement: if a boid has no neighbors, don't call its methods that involve neighbors
+        #         ## This magical line combines all the forces affecting the current boid
+        #         acceleration = [ c * agent.cohere(neighborhood)[0] + a * agent.align(neighborhood)[0] + s * agent.separate(neighborhood, seperation_threshold)[0], c * agent.cohere(neighborhood)[1] + a * agent.align(neighborhood)[1] + s*  agent.separate(neighborhood, seperation_threshold)[1]]
+        #
+        #     ##Add in the obstacles and update the boid
+        #     acceleration = [acceleration[0] + obstacle_weight * agent.avoid(obstacle_position)[0], acceleration[1] + obstacle_weight * agent.avoid(obstacle_position)[1]]
+        #     agent.update(self.window_width, self.window_height, acceleration)
 
-            for member in self.crowd: #Select a boid
-
-                if agent.get_boid_distance(member) <= self.threshold  and agent != member and agent.get_boid_angle(member) <= VIEW_ANGLE: #If a boid in close enough, not the agent, and visible to the agent add it to the neighborhood
-                    neighborhood.add_boid(member)
-                    #set_fill_color(1, 1, 1, 0.2)
-                    #draw_circle(agent.pos[0], agent.pos[1], self.threshold)
-
-            ##Handle the radius of effect of any obstacles
-            if 0 < fabs(agent.get_raw_distance(obstacle_position)) < 100:
-                obstacle_weight = 10
-            else:
-                obstacle_weight = 0
-            if neighborhood.pop != 0: #This is an efficiency improvement: if a boid has no neighbors, don't call its methods that involve neighbors
-                ## This magical line combines all the forces affecting the current boid
-                acceleration = [ c * agent.cohere(neighborhood)[0] + a * agent.align(neighborhood)[0] + s * agent.separate(neighborhood, seperation_threshold)[0], c * agent.cohere(neighborhood)[1] + a * agent.align(neighborhood)[1] + s*  agent.separate(neighborhood, seperation_threshold)[1]]
-
-            ##Add in the obstacles and update the boid
-            acceleration = [acceleration[0] + obstacle_weight * agent.avoid(obstacle_position)[0], acceleration[1] + obstacle_weight * agent.avoid(obstacle_position)[1]]
-            agent.update(self.window_width, self.window_height, acceleration)
 
     def draw(self, r, g, b, velocity_lines): #Draw the boids
         for boid in self.crowd:

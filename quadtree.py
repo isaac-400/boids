@@ -24,26 +24,26 @@ class Quadtree:
                     quadrant == 3 and self.c3 is not None) or (quadrant == 4 and self.c4 is not None)
 
     def insert(self, point):
-        if point.x >= self.point.x and point.y <= self.point.y:
+        if point.pos[0] >= self.point.pos[0] and point.pos[1] <= self.point.pos[1]:
             if self.hasChild(1):
                 self.getChild(1).insert(point)
             else:
-                self.c1 = Quadtree(point, self.point.x, self.y1, self.x2, self.point.y)
-        if point.x > self.point.x and point.y > self.point.y:
+                self.c1 = Quadtree(point, self.point.pos[0], self.y1, self.x2, self.point.pos[1])
+        if point.pos[0] > self.point.pos[0] and point.pos[1] > self.point.pos[1]:
             if self.hasChild(4):
                 self.getChild(4).insert(point)
             else:
-                self.c4 = Quadtree(point, self.point.x, self.point.y, self.x2, self.y2)
-        if point.x < self.point.x and point.y < self.point.y:
+                self.c4 = Quadtree(point, self.point.pos[0], self.point.pos[1], self.x2, self.y2)
+        if point.pos[0] < self.point.pos[0] and point.pos[1] < self.point.pos[1]:
             if self.hasChild(2):
                 self.getChild(2).insert(point)
             else:
-                self.c2 = Quadtree(point, self.x1, self.y1, self.point.x, self.point.y)
-        if point.x <= self.point.x and point.y >= self.point.y:
+                self.c2 = Quadtree(point, self.x1, self.y1, self.point.pos[0], self.point.pos[1])
+        if point.pos[0] <= self.point.pos[0] and point.pos[1] >= self.point.pos[1]:
             if self.hasChild(3):
                 self.getChild(3).insert(point)
             else:
-                self.c3 = Quadtree(point, self.x1, self.point.y, self.point.x, self.y2)
+                self.c3 = Quadtree(point, self.x1, self.point.pos[1], self.point.pos[0], self.y2)
 
     def findInCircle(self, cx, cy, cr):
         res = []
@@ -51,7 +51,7 @@ class Quadtree:
 
     def findInCircleHelper(self, cx, cy, cr, res):
         if self.circleIntersectsRectangle(cx, cy, cr, self.x1, self.y1, self.x2, self.y2):
-            if self.pointInCircle(self.point.x, self.point.y, cx, cy, cr):
+            if self.pointInCircle(self.point.pos[0], self.point.pos[1], cx, cy, cr):
                 res.append(self.point)
 
         if self.hasChild(1):

@@ -3,13 +3,15 @@
 #Purpose: Create an agent for a flock simulator. \
 # This algorithm was first described by Craig Reynolds in his 1987 paper \
 # "Flocks, herds, and schools: A distributed behavioral model"
+from operator import mul
+from random import uniform
 
 from cs1lib import *
 from math import sin, cos, sqrt, acos
 
 class Boid:
 ### Basic Boid Operation Methods
-    def __init__(self, x, y, v, dir):
+    def __init__(self, x, y, v=uniform(1, 3), dir=uniform(0, 2*pi)):
 
         self.speed = v
         self.dir = dir
@@ -42,6 +44,15 @@ class Boid:
         self.v = [self.v[0] + acceleration[0], self.v[1] + acceleration[1]]
         self.v = self.limit_magnitude(self.v, 10, 0)
 
+    def compute_acceleration(self, neighboring_list, separation_threshold, c, a, s):
+        acceleration = [] # a vector in format [x, y]
+
+        acceleration = map(sum, zip(map(mul, [a, a], self.align(neighboring_list)),
+                                    map(mul, [c, c], self.cohere(neighboring_list)),
+                                    map(mul, [s, s], self.separate(neighboring_list, separation_threshold))))
+
+        return list(acceleration)
+
     def draw(self, r=1, g= 0.7, b=0, velocity_lines=False):
         set_fill_color(r, g, b)
 
@@ -69,46 +80,33 @@ class Boid:
     def align(self, flock): ##returns an accelleration vector parallel to the average direction vector of the nearby flock
         avg_dir = 0
 
-        if flock.pop == 0: ##Safegaurd against empty neighborhood shenannigans
-            return [0,0]
-
-
-        for boid in flock.crowd:
+        for boid in flock:
             avg_dir = avg_dir + boid.dir
 
-
-
-        avg_dir = avg_dir / flock.pop
+        avg_dir = avg_dir / len(flock)
 
         result_vector = [sin(avg_dir), cos(avg_dir)]
         return result_vector
 
     def cohere(self, flock): #returns an accelleration vector pointing to the centerpoint of a flock around a boid #TODO: move this behavior to the flock class?
 
-        if flock.pop == 0: ##Safegaurd against empty neighborhood shenannigans
-            return [0, 0]
-
         avg_x = 0
         avg_y = 0
 
-        for boid in flock.crowd:
+        for boid in flock:
             avg_x = avg_x + boid.pos[0]
             avg_y = avg_y + boid.pos[1]
 
-        avg_x = avg_x / flock.pop
-        avg_y = avg_y / flock.pop
+        avg_x = avg_x / len(flock)
+        avg_y = avg_y / len(flock)
 
         result_vector = [ avg_x - self.pos[0],  avg_y - self.pos[1]] #computes an average center in a flock
         return result_vector
 
     def separate(self, flock, threshold): #returns an accelleration vector pointing away from neighbors that are too close
-
-        if flock.pop == 0: ##Prevent errors from empty neighborhoods
-            return [0, 0]
-
         result = [0, 0]
 
-        for boid in flock.crowd:
+        for boid in flock:
             distance = self.get_boid_distance(boid)
 
             if distance <= threshold:
@@ -120,7 +118,6 @@ class Boid:
                 result[1] = result[1] + direction_y
 
         result = self.normalize(result)
-
 
         return result
 
