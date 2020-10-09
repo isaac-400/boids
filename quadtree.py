@@ -46,3 +46,30 @@ class Quadtree():
             else:
                 self.c3 = Quadtree(point, self.x1, self.point.y, self.point.x, self.y2)
 
+    def findInCircle(self, cx, cy, cr):
+        res = []
+        return self.findInCircleHelper(cx, cy, cr, res)
+
+    def findInCircleHelper(self, cx, cy ,cr , list):
+        if self.circleIntersectsRectangle(cx, cy, cr, self.x1, self.y1, self.x2, self.y2):
+            if self.pointInCircle(self.point.x, self.point.y, cx, cy , cr):
+                list.append(self.point)
+
+        if self.hasChild(1):
+            self.getChild(1).findInCircleHelper(cx, cy, cr, list)
+        if self.hasChild(2):
+            self.getChild(2).findInCircleHelper(cx, cy, cr, list)
+        if self.hasChild(3):
+            self.getChild(3).findInCircleHelper(cx, cy, cr, list)
+        if self.hasChild(4):
+            self.getChild(4).findInCircleHelper(cx, cy, cr, list)
+
+        return list
+
+    def circleIntersectsRectangle(self, cx, cy, cr, x1, y1, x2, y2):
+        closestX = min(max(cx, x1), x2)
+        closestY = min(max(cy, y1), y2)
+        return (cx-closestX)**2 + (cy-closestY)**2 <= cr**2
+
+    def pointInCircle(self, x, y ,cx, cy, cr):
+        return (x-cx)**2 + (y-cy)**2 <= cr**2
